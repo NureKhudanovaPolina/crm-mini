@@ -1,8 +1,7 @@
 function el(id) { return document.getElementById(id); }
-
 const API_URL = "/api";
 
-// LEAD FORM LOGIC
+// Lead form
 if (el('leadForm')) {
   const form = el('leadForm');
   const resultDiv = el('result');
@@ -11,38 +10,39 @@ if (el('leadForm')) {
     e.preventDefault();
     resultDiv.innerHTML = '';
 
-    const today = new Date().toISOString().split('T')[0];
-    if (el('dateFrom') && el('dateFrom').value > today) {
-      resultDiv.innerHTML = '<div class="error">Date from cannot be in the future.</div>';
-      return;
-    }
-
     const payload = {
       firstName: el('firstName').value.trim(),
       lastName: el('lastName').value.trim(),
       phone: el('phone').value.trim(),
       email: el('email').value.trim(),
-      clickId: el('clickId') ? el('clickId').value : ''
+      box_id: 28,
+      offer_id: 5,
+      countryCode: "GB",
+      language: "en",
+      password: "qwerty12",
+      landingUrl: window.location.origin,
+      ip: "0.0.0.0",
+      clickId: el('clickId') ? el('clickId').value : ""
     };
 
     if (!payload.firstName || !payload.lastName || !payload.phone || !payload.email) {
-      resultDiv.innerHTML = '<div class="error">Please fill required fields.</div>';
+      resultDiv.innerHTML = '<div class="error">Please fill required fields</div>';
       return;
     }
 
     try {
+      resultDiv.innerHTML = 'Sending...';
       const resp = await fetch(`${API_URL}/addlead`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
       const data = await resp.json();
-
-      if (data.status === true) {
-        resultDiv.innerHTML = `<div class="success">✅ Lead saved! <br>ID: ${data.id || '-'} <br>Email: ${data.email || '-'}</div>`;
+      if (data.status) {
+        resultDiv.innerHTML = `<div class="success">✅ Lead sent! ID: ${data.id}</div>`;
         form.reset();
       } else {
-        resultDiv.innerHTML = `<div class="error">❌ Error: ${data.error || 'unknown error'}</div>`;
+        resultDiv.innerHTML = `<div class="error">❌ Error: ${data.error}</div>`;
       }
     } catch (err) {
       console.error(err);
@@ -51,15 +51,15 @@ if (el('leadForm')) {
   });
 }
 
-// STATUSES PAGE LOGIC
+// Statuses page
 if (el('loadBtn')) {
   const loadBtn = el('loadBtn');
   const info = el('info');
   const tbody = document.querySelector('#statusesTable tbody');
 
-  function formatDateTimeLocal(dtValue) {
-    if (!dtValue) return '';
-    const d = new Date(dtValue);
+  function formatDate(dt) {
+    if (!dt) return '';
+    const d = new Date(dt);
     const pad = n => String(n).padStart(2,'0');
     return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
   }
@@ -69,8 +69,8 @@ if (el('loadBtn')) {
     info.textContent = 'Loading...';
 
     const payload = {
-      date_from: el('dateFrom').value ? el('dateFrom').value : '',
-      date_to: el('dateTo').value ? el('dateTo').value : ''
+      date_from: formatDate(el('dateFrom')?.value),
+      date_to: formatDate(el('dateTo')?.value)
     };
 
     try {
@@ -80,34 +80,31 @@ if (el('loadBtn')) {
         body: JSON.stringify(payload)
       });
       const data = await resp.json();
-
       if (!data.status) {
-        info.innerHTML = `<div class="error">❌ Error: ${data.error || 'unknown'}</div>`;
+        info.innerHTML = `<div class="error">❌ ${data.error}</div>`;
         return;
       }
 
-      const filteredRows = data.data.filter(r => {
-        const d = r.createdAt.split('T')[0]; 
-        if (payload.date_from && d < payload.date_from) return false;
-        if (payload.date_to && d > payload.date_to) return false;
-        return true;
-      });
-
-      if (filteredRows.length === 0) {
+      if (!data.data.length) {
         info.textContent = 'No records found';
         return;
       }
 
-      info.textContent = `✅ Loaded ${filteredRows.length} rows`;
-
-      for (const r of filteredRows) {
+      info.textContent = `✅ Loaded ${data.data.length} rows`;
+      for (const r of data.data) {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${r.id}</td><td>${r.email}</td><td>${r.firstName} ${r.lastName}</td><td>${r.phone}</td><td>${r.createdAt}</td>`;
+        tr.innerHTML = `
+          <td>${r.id}</td>
+          <td>${r.email}</td>
+          <td>${r.status}</td>
+          <td>${r.ftd}</td>
+          <td>${r.createdAt}</td>
+        `;
         tbody.appendChild(tr);
       }
-    } catch (err) {
+    } catch(err) {
       console.error(err);
-      info.innerHTML = `<div class="error">⚠️ Network or server error</div>`;
+      info.innerHTML = '<div class="error">⚠️ Network or server error</div>';
     }
   }
 
