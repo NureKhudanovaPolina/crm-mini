@@ -1,11 +1,13 @@
-# CRM Mini (lead form + statuses)
+CRM Mini
+Lead Form page: form for submitting new leads (required fields: firstName, lastName, phone, email).
+Statuses page: table with lead statuses, can be filtered by date.
+Uses the addlead and getstatuses API methods.
+Implemented via Node.js (Express) and frontend in HTML/JS/CSS.
+How to run locally
+Clone the repository: git clone https://github.com/username/crm-mini.git cd crm-mini
 
-Local:
-1. Node.js 18+ required.
-2. Install: `npm install`
-3. Dev: `npm run dev` (nodemon) or `npm start`
-4. Open http://localhost:3000/
+Install dependencies: npm install
 
-Deployment:
-- Скопіюйте репозиторій на GitHub.
-- Розгорніть на Render / Railway / Fly / Vercel (Node service) або інший хостинг, який підтримує Node.js.
+Start the server: node index.js
+
+Open in a browser: http://localhost:3000
