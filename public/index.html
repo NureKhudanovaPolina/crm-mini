@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Send Lead — Mini CRM</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-form">
+  <nav>
+    <a href="index.html">Lead form</a>
+    <a href="statuses.html">Statuses</a>
+  </nav>
+
+  <main>
+    <h1>Send Lead</h1>
+    <form id="leadForm">
+      <label>First name
+        <input id="firstName" type="text" required>
+      </label>
+      <label>Last name
+        <input id="lastName" type="text" required>
+      </label>
+      <label>Phone
+        <input id="phone" type="tel" required>
+      </label>
+      <label>Email
+        <input id="email" type="email" required>
+      </label>
+
+      <input type="hidden" id="clickId" value="">
+      <input type="hidden" id="countryCode" value="GB">
+      <input type="hidden" id="box_id" value="28">
+      <input type="hidden" id="offer_id" value="5">
+      <input type="hidden" id="landingUrl" value="">
+      <input type="hidden" id="ip" value="8.8.8.8">
+      <button type="submit">Send lead</button>
+    </form>
+
+    <div id="result"></div>
+  </main>
+
+  <script>
+    document.getElementById('landingUrl').value = window.location.origin;
+  </script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lead Statuses — Mini CRM</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-statuses">
+  <nav>
+    <a href="index.html">Lead form</a>
+    <a href="statuses.html">Statuses</a>
+  </nav>
+
+  <main>
+    <h1>Lead Statuses</h1>
+
+    <div class="filters">
+      <label>From:
+        <input type="datetime-local" id="dateFrom">
+      </label>
+      <label>To:
+        <input type="datetime-local" id="dateTo">
+      </label>
+      <button id="loadBtn">Load statuses</button>
+    </div>
+
+    <div id="info"></div>
+
+    <table id="statusesTable">
+      <thead>
+        <tr>
+          <th>id</th>
+          <th>email</th>
+          <th>status</th>
+          <th>ftd</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
